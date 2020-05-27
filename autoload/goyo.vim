@@ -88,14 +88,6 @@ function! s:resize_pads()
   augroup END
 
   let t:goyo_dim.width = s:const(t:goyo_dim.width, 2, &columns)
-  let t:goyo_dim.height = s:const(t:goyo_dim.height, 2, &lines)
-
-  let vmargin = max([0, (&lines - t:goyo_dim.height) / 2 - 1])
-  let yoff = s:const(t:goyo_dim.yoff, - vmargin, vmargin)
-  let top = vmargin + yoff
-  let bot = vmargin - yoff - 1
-  call s:setup_pad(t:goyo_pads.t, 0, top, 'j')
-  call s:setup_pad(t:goyo_pads.b, 0, bot, 'k')
 
   let nwidth  = max([len(string(line('$'))) + 1, &numberwidth])
   let width   = t:goyo_dim.width + (&number ? nwidth : 0)
@@ -150,9 +142,7 @@ function! s:maps_resize()
   let commands = {
   \ '=': ':<c-u>let t:goyo_dim = <sid>parse_arg(t:goyo_dim_expr) <bar> call <sid>resize_pads()<cr>',
   \ '>': ':<c-u>let t:goyo_dim.width = winwidth(0) + 2 * v:count1 <bar> call <sid>resize_pads()<cr>',
-  \ '<': ':<c-u>let t:goyo_dim.width = winwidth(0) - 2 * v:count1 <bar> call <sid>resize_pads()<cr>',
-  \ '+': ':<c-u>let t:goyo_dim.height += 2 * v:count1 <bar> call <sid>resize_pads()<cr>',
-  \ '-': ':<c-u>let t:goyo_dim.height -= 2 * v:count1 <bar> call <sid>resize_pads()<cr>'
+  \ '<': ':<c-u>let t:goyo_dim.width = winwidth(0) - 2 * v:count1 <bar> call <sid>resize_pads()<cr>'
   \ }
   let mapped = filter(keys(commands), "empty(maparg(\"\<c-w>\".v:val, 'n'))")
   for c in mapped
@@ -252,8 +242,6 @@ function! s:goyo_on(dim)
 
   let t:goyo_pads.l = s:init_pad('vertical topleft new')
   let t:goyo_pads.r = s:init_pad('vertical botright new')
-  let t:goyo_pads.t = s:init_pad('topleft new')
-  let t:goyo_pads.b = s:init_pad('botright new')
 
   call s:resize_pads()
   call s:tranquilize()
