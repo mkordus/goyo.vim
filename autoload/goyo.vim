@@ -107,7 +107,7 @@ endfunction
 
 function! s:tranquilize()
   let bg = s:get_color('Normal', 'bg#')
-  for grp in ['NonText', 'FoldColumn', 'ColorColumn', 'VertSplit',
+  for grp in ['FoldColumn', 'ColorColumn', 'VertSplit',
             \ 'StatusLine', 'StatusLineNC', 'SignColumn']
     " -1 on Vim / '' on GVim
     if bg == -1 || empty(bg)
