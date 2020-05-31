@@ -39,7 +39,6 @@ endfunction
 
 function! s:blank(repel)
   if bufwinnr(t:goyo_pads.r) <= bufwinnr(t:goyo_pads.l) + 1
-    \ || bufwinnr(t:goyo_pads.b) <= bufwinnr(t:goyo_pads.t) + 3
     call s:goyo_off()
   endif
   execute 'wincmd' a:repel
@@ -99,8 +98,7 @@ endfunction
 
 function! s:tranquilize()
   let bg = s:get_color('Normal', 'bg#')
-  for grp in ['FoldColumn', 'ColorColumn', 'VertSplit',
-            \ 'StatusLine', 'StatusLineNC', 'SignColumn']
+  for grp in ['FoldColumn', 'ColorColumn', 'VertSplit', 'SignColumn']
     " -1 on Vim / '' on GVim
     if bg == -1 || empty(bg)
       call s:set_color(grp, 'fg', get(g:, 'goyo_bg', 'black'))
@@ -174,7 +172,7 @@ function! s:goyo_on(dim)
     \ }
 
   " New tab
-  tab split
+  " tab split
 
   let t:goyo_master = winbufnr(0)
   let t:goyo_dim = dim
@@ -248,17 +246,17 @@ function! s:goyo_on(dim)
 
   augroup goyo
     autocmd!
-    autocmd TabLeave    * nested call s:goyo_off()
+    " autocmd TabLeave    * nested call s:goyo_off()
     autocmd VimResized  *        call s:resize_pads()
     autocmd ColorScheme *        call s:tranquilize()
-    autocmd BufWinEnter *        call s:hide_linenr() | call s:hide_statusline()
-    autocmd WinEnter,WinLeave *  call s:hide_statusline()
+    " autocmd BufWinEnter *        call s:hide_linenr() | call s:hide_statusline()
+    " autocmd WinEnter,WinLeave *  call s:hide_statusline()
     if has('nvim')
       autocmd TermClose * call feedkeys("\<plug>(goyo-resize)")
     endif
   augroup END
 
-  call s:hide_statusline()
+  " call s:hide_statusline()
   if exists('g:goyo_callbacks[0]')
     call g:goyo_callbacks[0]()
   endif
@@ -414,7 +412,7 @@ function! goyo#execute(bang, dim)
     if exists('#goyo') == 0
       call s:goyo_on(a:dim)
     elseif !empty(a:dim)
-      if winnr('$') < 5
+      if winnr('$') < 3
         call s:goyo_off()
         return goyo#execute(a:bang, a:dim)
       endif
